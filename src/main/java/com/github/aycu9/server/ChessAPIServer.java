@@ -26,6 +26,7 @@ public class ChessAPIServer {
 
     public void start() throws Exception {
         server = HttpServer.create(new InetSocketAddress(port), 0);
+        server.createContext("/register", this::registerUser);
         server.start();
     }
 
@@ -33,6 +34,14 @@ public class ChessAPIServer {
         if (server != null) {
             server.stop(0);// no delay
         }
+    }
+
+    private void registerUser(HttpExchange httpExchange) throws IOException {
+        httpExchange.sendResponseHeaders(200, 0);
+        NewUser newUser = gson.fromJson(new InputStreamReader(httpExchange.getRequestBody()), NewUser.class);
+        String uuid = userRepository.assignUUID(newUser.name);
+        httpExchange.getResponseBody().write(uuid.getBytes());
+        httpExchange.getResponseBody().close();
     }
 
 }

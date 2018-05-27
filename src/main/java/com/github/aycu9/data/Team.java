@@ -16,4 +16,11 @@ public class Team {
         }
         return new Team (1);
     }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "teamNumber=" + teamNumber +
+                '}';
+    }
 }

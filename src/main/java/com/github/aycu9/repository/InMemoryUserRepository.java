@@ -51,6 +51,7 @@ public class InMemoryUserRepository implements UserRepository {
         User user = new User(name);
         String uuid = user.getUuid();
         userMap.put(uuid, user);
+        System.out.println(userMap);
         return uuid;
     }
 

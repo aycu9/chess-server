@@ -53,4 +53,15 @@ public class User {
     public void setUserState(UserState userState) {
         this.userState = userState;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uuid='" + uuid + '\'' +
+                ", name='" + name + '\'' +
+                ", team=" + team +
+                ", opponent='" + opponent + '\'' +
+                ", userState=" + userState +
+                '}';
+    }
 }
