@@ -10,8 +10,15 @@ public class Main {
 
     public static void main (String[]args){
 
-        System.out.println("Starting chess server on Port 5000");
-        ChessAPIServer server = new ChessAPIServer(5000, new InMemoryUserRepository());
+        int port = 5000;
+        String portString = System.getenv("PORT");
+        System.out.println("Starting chess server on Port " + portString);
+        try{
+            port = Integer.parseInt(portString);
+        }catch (NumberFormatException ignored){
+
+        }
+        ChessAPIServer server = new ChessAPIServer(port, new InMemoryUserRepository());
         try {
             server.start();
         } catch (Exception e) {
