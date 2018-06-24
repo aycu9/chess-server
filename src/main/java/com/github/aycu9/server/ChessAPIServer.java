@@ -1,5 +1,6 @@
 package com.github.aycu9.server;
 
+import com.github.aycu9.data.Team;
 import com.github.aycu9.repository.UserRepository;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -7,9 +8,7 @@ import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 
 
 public class ChessAPIServer {
@@ -27,6 +26,7 @@ public class ChessAPIServer {
     public void start() throws Exception {
         server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/register", this::registerUser);
+        server.createContext("/host", this::hostGame);
         server.start();
     }
 
@@ -44,4 +44,10 @@ public class ChessAPIServer {
         httpExchange.getResponseBody().close();
     }
 
+    private void hostGame(HttpExchange httpExchange) throws IOException {
+        httpExchange.sendResponseHeaders(200, 0);
+        HostGameRequest hostGameRequest = gson.fromJson(new InputStreamReader(httpExchange.getRequestBody()), HostGameRequest.class);
+        userRepository.hostGame(hostGameRequest.uuid, new Team(hostGameRequest.team));
+        httpExchange.getResponseBody().close();
+    }
 }

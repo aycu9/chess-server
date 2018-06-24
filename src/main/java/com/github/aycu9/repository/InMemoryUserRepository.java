@@ -23,6 +23,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public void hostGame(String uuid, Team team) {
         userMap.get(uuid).setTeam(team);
+        printCurrentState();
     }
 
     @Override
@@ -38,8 +39,8 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public List<User> getListOfHosts() {
         List<User> hostList = new ArrayList<>();
-        for (User user: userMap.values()) {
-            if (user.isHosting()){
+        for (User user : userMap.values()) {
+            if (user.isHosting()) {
                 hostList.add(user);
             }
         }
@@ -51,7 +52,7 @@ public class InMemoryUserRepository implements UserRepository {
         User user = new User(name);
         String uuid = user.getUuid();
         userMap.put(uuid, user);
-        System.out.println(userMap);
+        printCurrentState();
         return uuid;
     }
 
@@ -79,5 +80,11 @@ public class InMemoryUserRepository implements UserRepository {
         user2.setTeam(null);
         user2.setOpponent(null);
         user2.setUserState(null);
+    }
+
+    public void printCurrentState() {
+        for (User user : userMap.values()) {
+            System.out.println(user);
+        }
     }
 }
