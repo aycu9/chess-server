@@ -1,6 +1,7 @@
 package com.github.aycu9.server;
 
 import com.github.aycu9.data.Team;
+import com.github.aycu9.data.User;
 import com.github.aycu9.repository.UserRepository;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -9,6 +10,8 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ChessAPIServer {
@@ -27,6 +30,7 @@ public class ChessAPIServer {
         server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/register", this::registerUser);
         server.createContext("/host", this::hostGame);
+        server.createContext("/host_list", this::getListOfHosts);
         server.start();
     }
 
@@ -48,6 +52,18 @@ public class ChessAPIServer {
         httpExchange.sendResponseHeaders(200, 0);
         HostGameRequest hostGameRequest = gson.fromJson(new InputStreamReader(httpExchange.getRequestBody()), HostGameRequest.class);
         userRepository.hostGame(hostGameRequest.uuid, new Team(hostGameRequest.team));
+        httpExchange.getResponseBody().close();
+    }
+
+    private void getListOfHosts(HttpExchange httpExchange) throws IOException {
+        httpExchange.sendResponseHeaders(200, 0);
+        List<User> usersHosting = userRepository.getListOfHosts();
+        List<Host> hostList = new ArrayList<>();
+        for (User user : usersHosting) {
+            hostList.add(new Host(user));
+        }
+        String hostListJson = gson.toJson(hostList);
+        httpExchange.getResponseBody().write(hostListJson.getBytes());
         httpExchange.getResponseBody().close();
     }
 }
