@@ -63,6 +63,7 @@ public class InMemoryUserRepository implements UserRepository {
         hostUser.setOpponent(otherUuid);
         otherUser.setTeam(hostUser.getTeam().getOppositeTeam());
         otherUser.setOpponent(hostUuid);
+        printCurrentState();
     }
 
     @Override
