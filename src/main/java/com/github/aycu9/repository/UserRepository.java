@@ -5,7 +5,6 @@ import com.github.aycu9.data.User;
 import com.github.aycu9.data.UserState;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Libra on 2018-05-19.
@@ -13,7 +12,7 @@ import java.util.Map;
 public interface UserRepository {
     void hostGame(String uuid, Team team);
 
-    UserState getState(String uuid);
+    User getUser(String uuid);
 
     void setState(String uuid, UserState userState);
 

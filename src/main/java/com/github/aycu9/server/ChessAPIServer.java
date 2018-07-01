@@ -32,6 +32,7 @@ public class ChessAPIServer {
         server.createContext("/host", this::hostGame);
         server.createContext("/host_list", this::getListOfHosts);
         server.createContext("/start_game", this::startGame);
+        server.createContext("/get_user", this::getUser);
         server.start();
     }
 
@@ -75,5 +76,13 @@ public class ChessAPIServer {
         httpExchange.getResponseBody().close();
     }
 
+    private void getUser (HttpExchange httpExchange) throws IOException {
+        httpExchange.sendResponseHeaders(200, 0);
+        GetUserRequest getUserRequest = gson.fromJson(new InputStreamReader(httpExchange.getRequestBody()), GetUserRequest.class);
+        User user = userRepository.getUser(getUserRequest.uuid);
+        String userJson = gson.toJson(user);
+        httpExchange.getResponseBody().write(userJson.getBytes());
+        httpExchange.getResponseBody().close();
+    }
 
 }

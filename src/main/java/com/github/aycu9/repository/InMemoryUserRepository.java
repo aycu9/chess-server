@@ -27,8 +27,8 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public UserState getState(String uuid) {
-        return userMap.get(uuid).getUserState();
+    public User getUser(String uuid) {
+        return userMap.get(uuid);
     }
 
     @Override
