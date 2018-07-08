@@ -45,7 +45,7 @@ public class ChessAPIServer {
     private void registerUser(HttpExchange httpExchange) throws IOException {
         httpExchange.sendResponseHeaders(200, 0);
         NewUser newUser = gson.fromJson(new InputStreamReader(httpExchange.getRequestBody()), NewUser.class);
-        String uuid = userRepository.assignUUID(newUser.name);
+        String uuid = '"' + userRepository.assignUUID(newUser.name) + '"';
         httpExchange.getResponseBody().write(uuid.getBytes());
         httpExchange.getResponseBody().close();
     }
@@ -69,14 +69,14 @@ public class ChessAPIServer {
         httpExchange.getResponseBody().close();
     }
 
-    private void startGame (HttpExchange httpExchange) throws IOException {
+    private void startGame(HttpExchange httpExchange) throws IOException {
         httpExchange.sendResponseHeaders(200, 0);
         StartGameRequest startGameRequest = gson.fromJson(new InputStreamReader(httpExchange.getRequestBody()), StartGameRequest.class);
         userRepository.startGame(startGameRequest.hostUuid, startGameRequest.otherUuid);
         httpExchange.getResponseBody().close();
     }
 
-    private void getUser (HttpExchange httpExchange) throws IOException {
+    private void getUser(HttpExchange httpExchange) throws IOException {
         httpExchange.sendResponseHeaders(200, 0);
         GetUserRequest getUserRequest = gson.fromJson(new InputStreamReader(httpExchange.getRequestBody()), GetUserRequest.class);
         User user = userRepository.getUser(getUserRequest.uuid);
