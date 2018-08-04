@@ -34,6 +34,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public void setState(String uuid, UserState userState) {
         userMap.get(uuid).setUserState(userState);
+        printCurrentState();
     }
 
     @Override
